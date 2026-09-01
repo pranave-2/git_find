@@ -1,8 +1,8 @@
 # Layer 3 — Skill synonym / semantic vocabulary.
 #
 # Maps JD terminology to canonical skill_id rows (see /shared skill table via
-# genie-agent/ddl/schema.sql). Extend this list whenever mock_genie.py or the
-# real Genie space logs a warning for an unmapped JD term.
+# genie-agent/ddl/schema.sql). Extend this list whenever the real Genie space
+# fails to map a JD term to a skill, or maps it to the wrong one.
 #
 # match: substrings looked for in the JD text (case-insensitive).
 # skill_id / skill_name: the canonical row this term resolves to.

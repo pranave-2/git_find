@@ -1,13 +1,15 @@
-"""Validate a genie retrieval JSON file against /shared/genie.retrieval.schema.json.
+"""Validate a REAL genie retrieval JSON file against /shared/genie.retrieval.schema.json.
 
-Run this against mock_genie.py's output, or against whatever a real
-Databricks Genie space returns once wired up, to confirm Module D's output
-still honours the contract Module C builds against — in particular that no
-score/rank field has crept in.
+Run this against the actual response from the live Databricks Genie space
+(exported from the Conversation API or copied from the UI's JSON view), to
+confirm Module D's output still honours the contract Module C builds
+against — in particular that no score/rank field has crept in. There is no
+offline/mock path: this only means something once it runs against the real
+Genie space's real output.
 
 Usage:
-    python3 scripts/validate_retrieval.py path/to/output.json
-    python3 scripts/mock_genie.py | python3 scripts/validate_retrieval.py -
+    python3 scripts/validate_retrieval.py path/to/genie_response.json
+    databricks genie ... | python3 scripts/validate_retrieval.py -
 """
 import json
 import pathlib
