@@ -13,7 +13,6 @@ FIXTURES = SHARED / "fixtures"
 PAIRS = [
     ("ingestion.raw_features.schema.json", "ingestion.raw_features.json", None),
     ("llm_evidence.schema.json", "llm_evidence.json", None),
-    ("scoring.repository_skill.schema.json", "scoring.repository_skill.json", None),
     ("scoring.ranking_result.schema.json", "scoring.ranking_result.json", None),
     ("genie.retrieval.schema.json", "genie.retrieval.json", None),
     ("app.recruiter_result.schema.json", "app.recruiter_result.json", None),

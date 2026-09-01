@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://recruitment-genie/shared/llm_evidence.schema.json",
-  "title": "Module B — LLM Evidence Layer",
-  "description": "Output of the Gemini evidence module. One document per repository. Produces a repo summary, candidate skill labels, natural-language evidence and embedding similarity. Deliberately has NO confidence or score field — scoring belongs to Module C. additionalProperties:false enforces that.",
+  "title": "Module B — LLM Evidence & Confidence Layer",
+  "description": "Output of the Gemini evidence module. One document per repository. Produces a repo summary and, per skill, a natural-language justification plus the Evidence Score itself. Change of plan (see shared/README.md): Gemini now assigns confidence directly, so REPOSITORY_SKILL.confidence is written straight from this document — there is no separate deterministic evidence-scoring step, and this module no longer depends on Module A's raw features to compute a score (README_text may still be used as prompt context, but is not required input).",
   "type": "object",
   "required": ["schema_version", "repo_id", "model", "generated_at", "repo_summary", "skills"],
   "additionalProperties": false,
@@ -16,7 +16,10 @@
       "additionalProperties": false,
       "properties": {
         "name": { "type": "string", "examples": ["gemini-2.5-pro"] },
-        "prompt_version": { "type": "string", "description": "Bump when the prompt changes so old rows are re-generatable." },
+        "prompt_version": {
+          "type": "string",
+          "description": "Bump when the scoring prompt changes. This is now the only 'formula version' in the system — there is no separate scoring-formula version, since the model assigns confidence directly."
+        },
         "embedding_model": { "type": "string" }
       }
     },
@@ -30,7 +33,7 @@
 
     "skills": {
       "type": "array",
-      "description": "Candidate skills the model believes the repo demonstrates. A label here is a claim, not a verdict — Module C decides how much it counts.",
+      "description": "Skills the model found evidence for, each with the Evidence Score assigned directly. A row here is written straight to REPOSITORY_SKILL — no downstream re-scoring.",
       "items": { "$ref": "#/$defs/skill_claim" }
     },
 
@@ -42,7 +45,7 @@
   "$defs": {
     "skill_claim": {
       "type": "object",
-      "required": ["skill_name", "nl_evidence", "semantic_similarity"],
+      "required": ["skill_name", "confidence", "nl_evidence"],
       "additionalProperties": false,
       "properties": {
         "skill_name": { "$ref": "common.schema.json#/$defs/skill_name" },
@@ -53,21 +56,25 @@
           ],
           "description": "Resolved against the SKILL vocabulary when the label matches a canonical skill; null when the model proposed a skill outside the vocabulary."
         },
+        "confidence": {
+          "$ref": "common.schema.json#/$defs/unit_interval",
+          "description": "Evidence Score for this repository-skill pair, assigned directly by the model — not computed by a downstream formula. Written straight to REPOSITORY_SKILL.confidence. Means 'the model found strong evidence', not 'probability the candidate knows the skill'."
+        },
         "nl_evidence": {
           "type": "string",
           "minLength": 1,
           "maxLength": 500,
-          "description": "How the skill shows up in this repo, in one sentence. Goes into SKILL_EVIDENCE.evidence and later into ai_summarize.",
+          "description": "How the skill shows up in this repo, in one sentence, and the basis for the confidence value above. Goes into SKILL_EVIDENCE.evidence and later into ai_summarize.",
           "examples": ["Backend services implemented in Python"]
         },
         "semantic_similarity": {
           "$ref": "common.schema.json#/$defs/unit_interval",
-          "description": "Cosine similarity between the canonical skill description embedding and the repo content embedding. An observable measurement, not a model judgement."
+          "description": "Optional supporting signal: cosine similarity between the canonical skill description embedding and the repo content embedding. No longer feeds a scoring formula — kept for inspection only."
         },
         "referenced_files": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "Files the model cited when writing nl_evidence, so the claim can be checked."
+          "description": "Files the model cited when writing nl_evidence, so the confidence value can be checked."
         }
       }
     }

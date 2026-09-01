@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://recruitment-genie/shared/scoring.ranking_result.schema.json",
-  "title": "Module C.2 — Ranking Result",
-  "description": "Output of the ranking scorer at JD time. Consumes Module D's retrieved evidence, aggregates per-skill across repositories (MAX), applies requirement weights from the JD, and produces the final deterministic candidate score. Genie never produces these numbers.",
+  "title": "Module C — Ranking Result",
+  "description": "Output of the ranking scorer at JD time — Module C's only remaining responsibility. Confidence per (repository, skill) is now written directly by Module B (Gemini); there is no separate deterministic evidence-scoring step and Module C has no dependency on Module A or Module B's internals. C consumes Module D's retrieved evidence rows, aggregates per-skill across repositories (MAX), applies requirement weights from the JD, and produces the final deterministic candidate score. Genie never produces these numbers.",
   "type": "object",
   "required": ["schema_version", "job_id", "policy_version", "requirement_weights", "aggregation", "ranked_candidates", "computed_at"],
   "additionalProperties": false,
@@ -12,7 +12,7 @@
 
     "policy_version": {
       "type": "string",
-      "description": "Version of the ranking policy (weights + aggregation rule). Scores are only comparable within one policy version."
+      "description": "Version of the ranking policy (requirement weights + aggregation rule). Scores are only comparable within one policy version."
     },
 
     "requirement_weights": {
@@ -63,7 +63,7 @@
                 "skill_name": { "$ref": "common.schema.json#/$defs/skill_name" },
                 "requirement_level": { "$ref": "common.schema.json#/$defs/requirement_level" },
                 "weight":   { "type": "number", "minimum": 0 },
-                "strength": { "$ref": "common.schema.json#/$defs/unit_interval", "description": "Aggregated evidence score across repos. 0 when has_evidence is false." },
+                "strength": { "$ref": "common.schema.json#/$defs/unit_interval", "description": "Aggregated Evidence Score across repos (as assigned by Module B). 0 when has_evidence is false." },
                 "has_evidence": { "type": "boolean", "description": "Distinguishes 'no evidence found' from 'evidence found and weak'." },
                 "contribution": { "type": "number", "description": "strength x weight — the row's share of the numerator." },
                 "contributing_repos": {

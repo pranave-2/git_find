@@ -1,13 +1,31 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "job_id": "J001",
   "job_title": "Backend Software Engineer",
   "interpreted_requirements": {
-    "required": ["Python", "REST API"],
-    "preferred": ["FastAPI", "Flask", "PostgreSQL", "Docker"],
-    "bonus": ["AWS"]
+    "required": [
+      "Python",
+      "REST API"
+    ],
+    "preferred": [
+      "FastAPI",
+      "Flask",
+      "PostgreSQL",
+      "Docker"
+    ],
+    "bonus": [
+      "AWS"
+    ]
   },
-  "scoring_policy": { "policy_version": "ranking-v1", "formula_version": "evidence-v1", "requirement_weights": { "required": 1.0, "preferred": 0.6, "bonus": 0.3 }, "aggregation": "max" },
+  "scoring_policy": {
+    "policy_version": "ranking-v1",
+    "requirement_weights": {
+      "required": 1.0,
+      "preferred": 0.6,
+      "bonus": 0.3
+    },
+    "aggregation": "max"
+  },
   "candidates": [
     {
       "rank": 1,
@@ -16,13 +34,40 @@
       "github_username": "rahul-dev",
       "score_pct": 87.0,
       "skill_breakdown": [
-        { "skill_name": "Python", "requirement_level": "required", "strength": 0.98, "has_evidence": true,
+        {
+          "skill_name": "Python",
+          "requirement_level": "required",
+          "strength": 0.98,
+          "has_evidence": true,
           "repos": [
-            { "repo_id": "R001", "repo_name": "ecommerce-api", "repo_url": "https://github.com/rahul-dev/ecommerce-api", "confidence": 0.98, "evidence": "Backend services implemented in Python" },
-            { "repo_id": "R002", "repo_name": "ml-price-predictor", "confidence": 0.90, "evidence": "ML pipeline implemented in Python" },
-            { "repo_id": "R003", "repo_name": "chatbot", "confidence": 0.75, "evidence": "Chatbot backend implemented in Python" }
-          ] },
-        { "skill_name": "AWS", "requirement_level": "bonus", "strength": 0, "has_evidence": false, "repos": [] }
+            {
+              "repo_id": "R001",
+              "repo_name": "ecommerce-api",
+              "repo_url": "https://github.com/rahul-dev/ecommerce-api",
+              "confidence": 0.98,
+              "evidence": "Backend services implemented in Python"
+            },
+            {
+              "repo_id": "R002",
+              "repo_name": "ml-price-predictor",
+              "confidence": 0.9,
+              "evidence": "ML pipeline implemented in Python"
+            },
+            {
+              "repo_id": "R003",
+              "repo_name": "chatbot",
+              "confidence": 0.75,
+              "evidence": "Chatbot backend implemented in Python"
+            }
+          ]
+        },
+        {
+          "skill_name": "AWS",
+          "requirement_level": "bonus",
+          "strength": 0,
+          "has_evidence": false,
+          "repos": []
+        }
       ],
       "justification": "Rahul demonstrates strong backend development experience, with Python supported across three repositories. His ecommerce-api project provides strong evidence of REST API, FastAPI and PostgreSQL experience. Docker is demonstrated through his chatbot project. No AWS evidence was found."
     }

@@ -1,12 +1,13 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "repo_id": "R001",
-  "model": { "name": "gemini-2.5-pro", "prompt_version": "repo-analysis-v3", "embedding_model": "text-embedding-004" },
+  "model": { "name": "gemini-2.5-pro", "prompt_version": "repo-scoring-v1", "embedding_model": "text-embedding-004" },
   "repo_summary": "Backend e-commerce REST service exposing product and order endpoints, persisted in PostgreSQL and containerized for deployment.",
   "skills": [
-    { "skill_name": "Python", "skill_id": "SK01", "nl_evidence": "Backend services implemented in Python", "semantic_similarity": 0.93, "referenced_files": ["app/main.py"] },
-    { "skill_name": "FastAPI", "skill_id": "SK02", "nl_evidence": "REST endpoints implemented using FastAPI", "semantic_similarity": 0.91 },
-    { "skill_name": "PostgreSQL", "skill_id": "SK05", "nl_evidence": "PostgreSQL used for application persistence", "semantic_similarity": 0.88 }
+    { "skill_name": "Python", "skill_id": "SK01", "confidence": 0.98, "nl_evidence": "Backend services implemented in Python", "semantic_similarity": 0.93, "referenced_files": ["app/main.py"] },
+    { "skill_name": "FastAPI", "skill_id": "SK02", "confidence": 0.96, "nl_evidence": "REST endpoints implemented using FastAPI", "semantic_similarity": 0.91 },
+    { "skill_name": "REST API", "skill_id": "SK04", "confidence": 0.95, "nl_evidence": "Product and order endpoints exposed through REST", "semantic_similarity": 0.90 },
+    { "skill_name": "PostgreSQL", "skill_id": "SK05", "confidence": 0.92, "nl_evidence": "PostgreSQL used for application persistence", "semantic_similarity": 0.88 }
   ],
   "generated_at": "2026-09-01T06:01:00Z",
   "warnings": []
