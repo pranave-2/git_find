@@ -45,14 +45,7 @@
               "repo_name": "ecommerce-api",
               "repo_url": "https://github.com/rahul-dev/ecommerce-api",
               "confidence": 0.98,
-              "evidence": "Backend services implemented in Python",
-              "signals": {
-                "language": { "value": 1.0, "detail": "python = 82% of repo bytes" },
-                "dependency": { "value": 0.9, "matches": ["fastapi", "psycopg2"] },
-                "code": { "value": 1.0, "matches": ["from fastapi import FastAPI"] },
-                "keyword": { "value": 0.85, "detail": "README mentions FastAPI" },
-                "semantic": { "value": 0.93, "detail": "cosine(SK01 description, repo content)" }
-              }
+              "evidence": "Backend services implemented in Python"
             },
             {
               "repo_id": "R002",
