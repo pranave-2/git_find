@@ -45,19 +45,88 @@
               "repo_name": "ecommerce-api",
               "repo_url": "https://github.com/rahul-dev/ecommerce-api",
               "confidence": 0.98,
-              "evidence": "Backend services implemented in Python"
+              "evidence": "Backend services implemented in Python",
+              "signals": {
+                "language": { "value": 1.0, "detail": "python = 82% of repo bytes" },
+                "dependency": { "value": 0.9, "matches": ["fastapi", "psycopg2"] },
+                "code": { "value": 1.0, "matches": ["from fastapi import FastAPI"] },
+                "keyword": { "value": 0.85, "detail": "README mentions FastAPI" },
+                "semantic": { "value": 0.93, "detail": "cosine(SK01 description, repo content)" }
+              }
             },
             {
               "repo_id": "R002",
               "repo_name": "ml-price-predictor",
-              "confidence": 0.9,
+              "repo_url": "https://github.com/rahul-dev/ml-price-predictor",
+              "confidence": 0.90,
               "evidence": "ML pipeline implemented in Python"
             },
             {
               "repo_id": "R003",
               "repo_name": "chatbot",
+              "repo_url": "https://github.com/rahul-dev/chatbot",
               "confidence": 0.75,
               "evidence": "Chatbot backend implemented in Python"
+            }
+          ]
+        },
+        {
+          "skill_name": "REST API",
+          "requirement_level": "required",
+          "strength": 0.95,
+          "has_evidence": true,
+          "repos": [
+            {
+              "repo_id": "R001",
+              "repo_name": "ecommerce-api",
+              "repo_url": "https://github.com/rahul-dev/ecommerce-api",
+              "confidence": 0.95,
+              "evidence": "Product and order endpoints exposed through REST"
+            }
+          ]
+        },
+        {
+          "skill_name": "FastAPI",
+          "requirement_level": "preferred",
+          "strength": 0.96,
+          "has_evidence": true,
+          "repos": [
+            {
+              "repo_id": "R001",
+              "repo_name": "ecommerce-api",
+              "repo_url": "https://github.com/rahul-dev/ecommerce-api",
+              "confidence": 0.96,
+              "evidence": "REST endpoints implemented using FastAPI"
+            }
+          ]
+        },
+        {
+          "skill_name": "PostgreSQL",
+          "requirement_level": "preferred",
+          "strength": 0.92,
+          "has_evidence": true,
+          "repos": [
+            {
+              "repo_id": "R001",
+              "repo_name": "ecommerce-api",
+              "repo_url": "https://github.com/rahul-dev/ecommerce-api",
+              "confidence": 0.92,
+              "evidence": "PostgreSQL used for application persistence"
+            }
+          ]
+        },
+        {
+          "skill_name": "Docker",
+          "requirement_level": "preferred",
+          "strength": 0.85,
+          "has_evidence": true,
+          "repos": [
+            {
+              "repo_id": "R003",
+              "repo_name": "chatbot",
+              "repo_url": "https://github.com/rahul-dev/chatbot",
+              "confidence": 0.85,
+              "evidence": "Application containerized using Docker"
             }
           ]
         },
@@ -70,6 +139,174 @@
         }
       ],
       "justification": "Rahul demonstrates strong backend development experience, with Python supported across three repositories. His ecommerce-api project provides strong evidence of REST API, FastAPI and PostgreSQL experience. Docker is demonstrated through his chatbot project. No AWS evidence was found."
+    },
+    {
+      "rank": 2,
+      "student_id": "S002",
+      "name": "Priya",
+      "github_username": "priya-code",
+      "score_pct": 79.3,
+      "skill_breakdown": [
+        {
+          "skill_name": "Python",
+          "requirement_level": "required",
+          "strength": 0.91,
+          "has_evidence": true,
+          "repos": [
+            {
+              "repo_id": "R004",
+              "repo_name": "banking-api",
+              "repo_url": "https://github.com/priya-code/banking-api",
+              "confidence": 0.91,
+              "evidence": "Banking backend implemented using Python"
+            }
+          ]
+        },
+        {
+          "skill_name": "REST API",
+          "requirement_level": "required",
+          "strength": 0.94,
+          "has_evidence": true,
+          "repos": [
+            {
+              "repo_id": "R004",
+              "repo_name": "banking-api",
+              "repo_url": "https://github.com/priya-code/banking-api",
+              "confidence": 0.94,
+              "evidence": "Banking services exposed through REST APIs"
+            }
+          ]
+        },
+        {
+          "skill_name": "PostgreSQL",
+          "requirement_level": "preferred",
+          "strength": 0.88,
+          "has_evidence": true,
+          "repos": [
+            {
+              "repo_id": "R004",
+              "repo_name": "banking-api",
+              "repo_url": "https://github.com/priya-code/banking-api",
+              "confidence": 0.88,
+              "evidence": "PostgreSQL used for transaction logging"
+            }
+          ]
+        },
+        {
+          "skill_name": "Docker",
+          "requirement_level": "preferred",
+          "strength": 0.88,
+          "has_evidence": true,
+          "repos": [
+            {
+              "repo_id": "R005",
+              "repo_name": "cloud-monitor",
+              "repo_url": "https://github.com/priya-code/cloud-monitor",
+              "confidence": 0.88,
+              "evidence": "Monitoring application containerized with Docker"
+            }
+          ]
+        },
+        {
+          "skill_name": "AWS",
+          "requirement_level": "bonus",
+          "strength": 0.93,
+          "has_evidence": true,
+          "repos": [
+            {
+              "repo_id": "R005",
+              "repo_name": "cloud-monitor",
+              "repo_url": "https://github.com/priya-code/cloud-monitor",
+              "confidence": 0.93,
+              "evidence": "Monitoring infrastructure deployed using AWS"
+            }
+          ]
+        },
+        {
+          "skill_name": "FastAPI",
+          "requirement_level": "preferred",
+          "strength": 0,
+          "has_evidence": false,
+          "repos": []
+        }
+      ],
+      "justification": "Priya shows a strong Python and REST API background in banking-api. Her cloud-monitor project provides solid evidence for Docker and AWS deployment. No FastAPI or Flask evidence was detected."
+    },
+    {
+      "rank": 3,
+      "student_id": "S003",
+      "name": "Arjun",
+      "github_username": "arjun-dev",
+      "score_pct": 63.8,
+      "skill_breakdown": [
+        {
+          "skill_name": "Python",
+          "requirement_level": "required",
+          "strength": 0.72,
+          "has_evidence": true,
+          "repos": [
+            {
+              "repo_id": "R006",
+              "repo_name": "scripting-utils",
+              "repo_url": "https://github.com/arjun-dev/scripting-utils",
+              "confidence": 0.72,
+              "evidence": "Utility scripts implemented in Python"
+            }
+          ]
+        },
+        {
+          "skill_name": "REST API",
+          "requirement_level": "required",
+          "strength": 0.65,
+          "has_evidence": true,
+          "repos": [
+            {
+              "repo_id": "R006",
+              "repo_name": "scripting-utils",
+              "repo_url": "https://github.com/arjun-dev/scripting-utils",
+              "confidence": 0.65,
+              "evidence": "Basic HTTP endpoints exposed"
+            }
+          ]
+        },
+        {
+          "skill_name": "Docker",
+          "requirement_level": "preferred",
+          "strength": 0.82,
+          "has_evidence": true,
+          "repos": [
+            {
+              "repo_id": "R007",
+              "repo_name": "devops-toolbox",
+              "repo_url": "https://github.com/arjun-dev/devops-toolbox",
+              "confidence": 0.82,
+              "evidence": "DevOps automation containerized with Docker"
+            }
+          ]
+        },
+        {
+          "skill_name": "FastAPI",
+          "requirement_level": "preferred",
+          "strength": 0,
+          "has_evidence": false,
+          "repos": []
+        },
+        {
+          "skill_name": "PostgreSQL",
+          "requirement_level": "preferred",
+          "strength": 0,
+          "has_evidence": false,
+          "repos": []
+        },
+        {
+          "skill_name": "AWS",
+          "requirement_level": "bonus",
+          "strength": 0,
+          "has_evidence": false,
+          "repos": []
+        }
+      ],
+      "justification": "Arjun has moderate evidence in Python scripting and Docker containerization. Limited REST API evidence was found, and no evidence was detected for FastAPI, PostgreSQL, or AWS."
     }
   ],
   "generated_at": "2026-09-01T10:00:07Z"

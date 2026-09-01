@@ -1,0 +1,93 @@
+.skill-badge {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.6rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.skill-badge:hover {
+  border-color: var(--border-default);
+  background: var(--bg-elevated);
+}
+
+.skill-badge.no-evidence {
+  opacity: 0.6;
+}
+
+.skill-badge-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.skill-status-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.icon-check {
+  background: var(--success-soft);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.icon-cross {
+  background: var(--error-soft);
+  color: var(--error);
+  border: 1px solid rgba(244, 63, 94, 0.3);
+}
+
+.skill-name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.skill-badge-strength {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.strength-bar-track {
+  flex: 1;
+  height: 5px;
+  background: var(--bg-base);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.strength-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.6s var(--ease-out);
+}
+
+.strength-bar-fill.level-required {
+  background: var(--primary-500);
+}
+.strength-bar-fill.level-preferred {
+  background: var(--warning);
+}
+.strength-bar-fill.level-bonus {
+  background: var(--info);
+}
+
+.strength-value {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  min-width: 65px;
+  text-align: right;
+}
