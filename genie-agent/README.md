@@ -74,19 +74,25 @@ are **About, Sources, Instructions, Examples**; there is no separate
 
 ## What's actually been verified (live, not simulated)
 
-Ran the seeded J001 JD through the live agent's chat, 3 rounds, tightening
-`config/instructions.md` between rounds based on real failures observed —
-not hypothetical ones:
+Ran the seeded J001 JD — and several shorter retrieval-style questions,
+through both the JD-paste and typed-question entry paths — through the
+live agent's chat, 6 rounds, tightening `config/instructions.md` between
+rounds based on real failures observed, not hypothetical ones. Full
+blow-by-blow is in `config/instructions.md`'s own header; summary:
 
 | Round | Found | Fix |
 |---|---|---|
-| 1 | Correct retrieval (all repo/skill/confidence rows matched seed data exactly, restricted to the 3 registered students) — but response collapsed evidence into a checkmark table and labeled Arjun "Not Qualified," both violations of "retrieval only" | Added explicit bans on qualification language and boolean-only tables |
-| 2 | Qualification wording gone, but agent switched to comparative phrasing ("strongest alignment") — same violation, different words. Raw confidence numbers confirmed present and correct when asked directly for the raw table | Added explicit ban on comparative/superlative language between candidates |
-| 3 | No qualification or comparative language; all confidence values and evidence text correct and present in the narrative response. One chat-UI "overview" grid still renders Yes/NULL instead of numbers | Left as-is — this is a chat-UI rendering default, not a data problem; the Conversation API path reads literal numeric SQL results regardless of what the chat bubble renders |
+| 1 | Correct retrieval, but response collapsed evidence into a checkmark table and labeled a candidate "Not Qualified" | Banned qualification language and boolean-only tables |
+| 2 | Qualification wording gone, replaced with comparative phrasing ("strongest alignment") | Banned comparative/superlative language between candidates |
+| 3 (token trim) | Consolidating 12→8 bullets reintroduced both prior issues via new wording ("meets the required skills") plus dropped the explicit table format, returning prose bullets | Banned the *concept* of judgment (not just phrases); re-added explicit table requirement |
+| 4 | Same instructions, different entry path (typed question vs. JD paste) reproduced the round-3 violations — traced to a carve-out in the table-only rule that gave the model license for other prose too | Removed the exception entirely: table only, zero prose, no exceptions |
+| 5 | The "placeholder row for zero-evidence candidates" fix backfired — leaked a candidate's real *unrelated* confidence scores with the skill label blanked, more misleading than omission | Dropped placeholder rows entirely; zero-evidence candidates are correctly absent from the table, handled downstream via `registered_student_ids` instead |
+| 6 | Table fully correct, but response included an auto-generated chart alongside it — never explicitly banned | Added explicit ban on charts/visualizations |
 
-Every evidence row across all 3 rounds was checked field-by-field against
-`seed/seed_data.sql` — no row invented, none dropped, none silently averaged.
-This confirms Layers 1–5 all functioning correctly on a real Genie Agent.
+Every evidence row across every round was checked field-by-field against
+`seed/seed_data.sql` — no row invented, none dropped, none silently
+averaged. This confirms Layers 1–5 all functioning correctly on a real
+Genie Agent, across multiple question phrasings, not just one lucky path.
 
 **Still open**: this was verified through the chat UI, which returns
 prose/CSV, not the structured JSON `/shared/genie.retrieval.schema.json`
