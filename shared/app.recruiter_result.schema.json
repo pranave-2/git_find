@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://recruitment-genie/shared/app.recruiter_result.schema.json",
+  "title": "Module E — Recruiter Result",
+  "description": "GET /jobs/{job_id}/results. What the recruiter dashboard renders: the deterministic ranking from Module C plus the ai_summarize justification, with the full evidence breakdown attached so 'why did Rahul get 87.5?' is answerable in the UI without another query.",
+  "type": "object",
+  "required": ["schema_version", "job_id", "job_title", "candidates", "generated_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/schema_version" },
+    "job_id": { "$ref": "common.schema.json#/$defs/job_id" },
+    "job_title": { "type": "string" },
+
+    "interpreted_requirements": {
+      "$ref": "genie.retrieval.schema.json#/properties/interpreted_requirements",
+      "description": "Shown to the recruiter so they can see how the JD was read, and correct it if Genie misread a requirement."
+    },
+
+    "scoring_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "policy_version":  { "type": "string" },
+        "formula_version": { "type": "string" },
+        "requirement_weights": { "$ref": "scoring.ranking_result.schema.json#/properties/requirement_weights" },
+        "aggregation": { "type": "string" }
+      },
+      "description": "Surfaced in the UI so the score is explainable as policy, not as model opinion."
+    },
+
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["rank", "student_id", "name", "score_pct", "skill_breakdown", "justification"],
+        "additionalProperties": false,
+        "properties": {
+          "rank": { "type": "integer", "minimum": 1 },
+          "student_id": { "$ref": "common.schema.json#/$defs/student_id" },
+          "name": { "type": "string" },
+          "github_username": { "type": "string" },
+
+          "score_pct": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100,
+            "description": "Module C's score x 100, rounded for display. The stored source of truth stays in [0,1]."
+          },
+
+          "skill_breakdown": {
+            "type": "array",
+            "description": "The tick/cross list under each candidate row.",
+            "items": {
+              "type": "object",
+              "required": ["skill_name", "requirement_level", "strength", "has_evidence"],
+              "additionalProperties": false,
+              "properties": {
+                "skill_name": { "$ref": "common.schema.json#/$defs/skill_name" },
+                "requirement_level": { "$ref": "common.schema.json#/$defs/requirement_level" },
+                "strength": { "$ref": "common.schema.json#/$defs/unit_interval" },
+                "has_evidence": { "type": "boolean", "description": "false renders as 'no evidence' rather than as a 0.00 score." },
+                "repos": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["repo_name", "confidence", "evidence"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "repo_id":    { "$ref": "common.schema.json#/$defs/repo_id" },
+                      "repo_name":  { "type": "string" },
+                      "repo_url":   { "type": "string", "format": "uri" },
+                      "confidence": { "$ref": "common.schema.json#/$defs/unit_interval" },
+                      "evidence":   { "type": "string" },
+                      "signals": {
+                        "$ref": "scoring.repository_skill.schema.json#/properties/signals",
+                        "description": "Optional drill-down: the six signals behind this repo's Evidence Score."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "justification": {
+            "type": "string",
+            "description": "Databricks ai_summarize output over the retrieved evidence. Narrative only — it explains the score, it never produces it."
+          }
+        }
+      }
+    },
+
+    "generated_at": { "$ref": "common.schema.json#/$defs/timestamp" }
+  }
+}

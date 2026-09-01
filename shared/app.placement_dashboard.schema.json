@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://recruitment-genie/shared/app.placement_dashboard.schema.json",
+  "title": "Module E — Placement Cell Dashboard",
+  "description": "GET /placement/overview. Cohort-level aggregates for the placement cell. By design this contract exposes no student_id and no per-student filtering — the shape itself enforces the privacy decision rather than relying on the UI to hide fields.",
+  "type": "object",
+  "required": ["schema_version", "cohort_size", "skill_coverage", "generated_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/schema_version" },
+
+    "cohort_size": { "type": "integer", "minimum": 0 },
+    "repos_ingested": { "type": "integer", "minimum": 0 },
+    "students_with_no_repos": { "type": "integer", "minimum": 0 },
+
+    "skill_coverage": {
+      "type": "array",
+      "description": "How many students in the cohort show evidence for each canonical skill, and how strong that evidence is.",
+      "items": {
+        "type": "object",
+        "required": ["skill_name", "student_count", "coverage_pct"],
+        "additionalProperties": false,
+        "properties": {
+          "skill_name": { "$ref": "common.schema.json#/$defs/skill_name" },
+          "category": { "type": "string" },
+          "student_count": { "type": "integer", "minimum": 0 },
+          "coverage_pct": { "type": "number", "minimum": 0, "maximum": 100 },
+          "median_strength": { "$ref": "common.schema.json#/$defs/unit_interval" }
+        }
+      }
+    },
+
+    "skill_gaps": {
+      "type": "array",
+      "description": "Skills demanded by recent JDs where cohort coverage is low — the actionable output for the placement cell.",
+      "items": {
+        "type": "object",
+        "required": ["skill_name", "demand_count", "coverage_pct"],
+        "additionalProperties": false,
+        "properties": {
+          "skill_name": { "$ref": "common.schema.json#/$defs/skill_name" },
+          "demand_count": { "type": "integer", "minimum": 0, "description": "Number of jobs that listed this skill as required or preferred." },
+          "coverage_pct": { "type": "number", "minimum": 0, "maximum": 100 }
+        }
+      }
+    },
+
+    "job_summary": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["job_id", "title", "registered_count"],
+        "additionalProperties": false,
+        "properties": {
+          "job_id": { "$ref": "common.schema.json#/$defs/job_id" },
+          "title": { "type": "string" },
+          "registered_count": { "type": "integer", "minimum": 0 },
+          "median_score_pct": { "type": "number", "minimum": 0, "maximum": 100 }
+        }
+      }
+    },
+
+    "generated_at": { "$ref": "common.schema.json#/$defs/timestamp" }
+  }
+}

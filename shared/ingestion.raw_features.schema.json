@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://recruitment-genie/shared/ingestion.raw_features.schema.json",
+  "title": "Module A — Ingestion Raw Features",
+  "description": "Output of the GitHub ingestion module. One document per repository. Contains only directly observable facts: no LLM output, no skill labels, no scores.",
+  "type": "object",
+  "required": ["schema_version", "repo_id", "student_id", "repo_name", "language_pct", "dependencies", "code_signals", "readme_text", "ingested_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/schema_version" },
+    "repo_id":    { "$ref": "common.schema.json#/$defs/repo_id" },
+    "student_id": { "$ref": "common.schema.json#/$defs/student_id" },
+    "repo_name":  { "type": "string", "minLength": 1 },
+    "repo_url":   { "type": "string", "format": "uri" },
+    "default_branch": { "type": "string" },
+    "commit_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{7,40}$",
+      "description": "Commit the features were extracted from. Re-ingestion is a no-op when this is unchanged."
+    },
+
+    "language_pct": {
+      "type": "object",
+      "description": "Fraction of repo bytes per language, from the GitHub languages endpoint. Values sum to ~1.0.",
+      "propertyNames": { "pattern": "^[a-z0-9+#._ -]+$" },
+      "additionalProperties": { "$ref": "common.schema.json#/$defs/unit_interval" },
+      "examples": [{ "python": 0.82, "html": 0.10, "dockerfile": 0.08 }]
+    },
+
+    "dependencies": {
+      "type": "array",
+      "description": "Packages declared in manifest files. Names are lowercased and stripped of version specifiers.",
+      "items": {
+        "type": "object",
+        "required": ["name", "ecosystem", "source_file"],
+        "additionalProperties": false,
+        "properties": {
+          "name":      { "type": "string", "minLength": 1 },
+          "ecosystem": { "type": "string", "enum": ["pypi", "npm", "maven", "gradle", "go", "cargo", "nuget", "rubygems", "composer", "other"] },
+          "source_file": { "type": "string", "examples": ["requirements.txt", "package.json", "pom.xml"] },
+          "version":   { "type": ["string", "null"] }
+        }
+      }
+    },
+
+    "code_signals": {
+      "type": "array",
+      "description": "Static-analysis hits. Each carries its file path so downstream scoring is auditable.",
+      "items": {
+        "type": "object",
+        "required": ["type", "value", "provenance"],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["import", "framework_init", "dockerfile", "compose_file", "db_connection", "api_route", "ci_config", "iac_config", "config_file", "test_suite"]
+          },
+          "value": { "type": "string", "minLength": 1, "examples": ["from fastapi import FastAPI", "Dockerfile present"] },
+          "provenance": { "$ref": "common.schema.json#/$defs/provenance" }
+        }
+      }
+    },
+
+    "readme_text": {
+      "type": "string",
+      "description": "Plaintext README/docs content for downstream keyword and embedding work. Empty string when absent."
+    },
+
+    "repo_stats": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "size_bytes":   { "type": "integer", "minimum": 0 },
+        "file_count":   { "type": "integer", "minimum": 0 },
+        "commit_count": { "type": "integer", "minimum": 0 },
+        "last_commit_at": { "$ref": "common.schema.json#/$defs/timestamp" },
+        "is_fork":  { "type": "boolean", "description": "Forks with no own commits should be flagged, not silently scored." },
+        "stars":    { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "ingested_at": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Non-fatal issues: rate limiting, truncated tree, unparseable manifest."
+    }
+  }
+}

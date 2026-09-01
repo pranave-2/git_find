@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "repo_id": "R001",
+  "student_id": "S001",
+  "repo_name": "ecommerce-api",
+  "repo_url": "https://github.com/rahul-dev/ecommerce-api",
+  "default_branch": "main",
+  "commit_sha": "9f2c1ab",
+  "language_pct": { "python": 0.82, "html": 0.10, "dockerfile": 0.08 },
+  "dependencies": [
+    { "name": "fastapi", "ecosystem": "pypi", "source_file": "requirements.txt", "version": "0.115.0" },
+    { "name": "psycopg2", "ecosystem": "pypi", "source_file": "requirements.txt", "version": null }
+  ],
+  "code_signals": [
+    { "type": "import", "value": "from fastapi import FastAPI", "provenance": { "file_path": "app/main.py", "line": 3 } },
+    { "type": "dockerfile", "value": "Dockerfile present", "provenance": { "file_path": "Dockerfile" } },
+    { "type": "api_route", "value": "@app.get('/products')", "provenance": { "file_path": "app/routes/products.py", "line": 12 } }
+  ],
+  "readme_text": "Backend e-commerce REST service built with FastAPI and PostgreSQL.",
+  "repo_stats": { "size_bytes": 184320, "file_count": 42, "commit_count": 87, "last_commit_at": "2026-08-14T09:12:00Z", "is_fork": false, "stars": 3 },
+  "ingested_at": "2026-09-01T06:00:00Z",
+  "warnings": []
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "cohort_size": 3,
+  "repos_ingested": 6,
+  "students_with_no_repos": 0,
+  "skill_coverage": [
+    { "skill_name": "Python", "category": "Programming", "student_count": 2, "coverage_pct": 66.7, "median_strength": 0.945 },
+    { "skill_name": "Docker", "category": "DevOps", "student_count": 2, "coverage_pct": 66.7, "median_strength": 0.865 },
+    { "skill_name": "AWS", "category": "Cloud", "student_count": 1, "coverage_pct": 33.3, "median_strength": 0.93 }
+  ],
+  "skill_gaps": [
+    { "skill_name": "AWS", "demand_count": 1, "coverage_pct": 33.3 }
+  ],
+  "job_summary": [
+    { "job_id": "J001", "title": "Backend Software Engineer", "registered_count": 3, "median_score_pct": 79.3 }
+  ],
+  "generated_at": "2026-09-01T10:05:00Z"
+}
