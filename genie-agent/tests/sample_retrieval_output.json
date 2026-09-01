@@ -1,0 +1,203 @@
+{
+  "schema_version": "1.0.0",
+  "job_id": "J001",
+  "genie_space_id": "mock-genie-offline",
+  "jd_text_hash": "sha256:e0d7423f67b3...",
+  "interpreted_requirements": {
+    "required": [
+      "Python",
+      "REST API"
+    ],
+    "preferred": [
+      "FastAPI",
+      "Flask",
+      "PostgreSQL",
+      "Docker"
+    ],
+    "bonus": [
+      "AWS"
+    ]
+  },
+  "mapped_skills": [
+    {
+      "jd_term": "python",
+      "skill_id": "SK01",
+      "skill_name": "Python",
+      "requirement_level": "required",
+      "mapping_source": "exact"
+    },
+    {
+      "jd_term": "fastapi",
+      "skill_id": "SK02",
+      "skill_name": "FastAPI",
+      "requirement_level": "preferred",
+      "mapping_source": "exact"
+    },
+    {
+      "jd_term": "flask",
+      "skill_id": "SK03",
+      "skill_name": "Flask",
+      "requirement_level": "preferred",
+      "mapping_source": "exact"
+    },
+    {
+      "jd_term": "rest api",
+      "skill_id": "SK04",
+      "skill_name": "REST API",
+      "requirement_level": "required",
+      "mapping_source": "exact"
+    },
+    {
+      "jd_term": "postgresql",
+      "skill_id": "SK05",
+      "skill_name": "PostgreSQL",
+      "requirement_level": "preferred",
+      "mapping_source": "exact"
+    },
+    {
+      "jd_term": "docker",
+      "skill_id": "SK06",
+      "skill_name": "Docker",
+      "requirement_level": "preferred",
+      "mapping_source": "exact"
+    },
+    {
+      "jd_term": "aws",
+      "skill_id": "SK07",
+      "skill_name": "AWS",
+      "requirement_level": "bonus",
+      "mapping_source": "exact"
+    }
+  ],
+  "generated_sql": "SELECT jr.job_id, s.student_id, s.name, r.repo_id, r.repo_name, sk.skill_name, rs.confidence, se.evidence FROM job_registration jr JOIN student s ON jr.student_id = s.student_id JOIN repository r ON s.student_id = r.student_id JOIN repository_skill rs ON r.repo_id = rs.repo_id JOIN skill sk ON rs.skill_id = sk.skill_id JOIN skill_evidence se ON rs.repo_id = se.repo_id AND rs.skill_id = se.skill_id WHERE jr.job_id = 'J001' AND sk.skill_name IN ('Python', 'FastAPI', 'Flask', 'REST API', 'PostgreSQL', 'Docker', 'AWS')",
+  "evidence_rows": [
+    {
+      "student_id": "S001",
+      "name": "Rahul",
+      "repo_id": "R001",
+      "repo_name": "ecommerce-api",
+      "skill_id": "SK01",
+      "skill_name": "Python",
+      "confidence": 0.98,
+      "evidence": "Backend services implemented in Python",
+      "requirement_level": "required"
+    },
+    {
+      "student_id": "S001",
+      "name": "Rahul",
+      "repo_id": "R001",
+      "repo_name": "ecommerce-api",
+      "skill_id": "SK02",
+      "skill_name": "FastAPI",
+      "confidence": 0.96,
+      "evidence": "REST endpoints implemented using FastAPI",
+      "requirement_level": "preferred"
+    },
+    {
+      "student_id": "S001",
+      "name": "Rahul",
+      "repo_id": "R001",
+      "repo_name": "ecommerce-api",
+      "skill_id": "SK04",
+      "skill_name": "REST API",
+      "confidence": 0.95,
+      "evidence": "Product and order endpoints exposed through REST",
+      "requirement_level": "required"
+    },
+    {
+      "student_id": "S001",
+      "name": "Rahul",
+      "repo_id": "R001",
+      "repo_name": "ecommerce-api",
+      "skill_id": "SK05",
+      "skill_name": "PostgreSQL",
+      "confidence": 0.92,
+      "evidence": "PostgreSQL used for application persistence",
+      "requirement_level": "preferred"
+    },
+    {
+      "student_id": "S001",
+      "name": "Rahul",
+      "repo_id": "R002",
+      "repo_name": "ml-price-predictor",
+      "skill_id": "SK01",
+      "skill_name": "Python",
+      "confidence": 0.9,
+      "evidence": "ML preprocessing and prediction pipeline implemented in Python",
+      "requirement_level": "required"
+    },
+    {
+      "student_id": "S001",
+      "name": "Rahul",
+      "repo_id": "R003",
+      "repo_name": "chatbot",
+      "skill_id": "SK01",
+      "skill_name": "Python",
+      "confidence": 0.75,
+      "evidence": "Chatbot backend implemented in Python",
+      "requirement_level": "required"
+    },
+    {
+      "student_id": "S001",
+      "name": "Rahul",
+      "repo_id": "R003",
+      "repo_name": "chatbot",
+      "skill_id": "SK06",
+      "skill_name": "Docker",
+      "confidence": 0.85,
+      "evidence": "Application containerized using Docker",
+      "requirement_level": "preferred"
+    },
+    {
+      "student_id": "S002",
+      "name": "Priya",
+      "repo_id": "R004",
+      "repo_name": "banking-api",
+      "skill_id": "SK01",
+      "skill_name": "Python",
+      "confidence": 0.91,
+      "evidence": "Banking backend implemented using Python",
+      "requirement_level": "required"
+    },
+    {
+      "student_id": "S002",
+      "name": "Priya",
+      "repo_id": "R004",
+      "repo_name": "banking-api",
+      "skill_id": "SK04",
+      "skill_name": "REST API",
+      "confidence": 0.94,
+      "evidence": "Banking services exposed through REST APIs",
+      "requirement_level": "required"
+    },
+    {
+      "student_id": "S002",
+      "name": "Priya",
+      "repo_id": "R005",
+      "repo_name": "cloud-monitor",
+      "skill_id": "SK06",
+      "skill_name": "Docker",
+      "confidence": 0.88,
+      "evidence": "Monitoring application containerized with Docker",
+      "requirement_level": "preferred"
+    },
+    {
+      "student_id": "S002",
+      "name": "Priya",
+      "repo_id": "R005",
+      "repo_name": "cloud-monitor",
+      "skill_id": "SK07",
+      "skill_name": "AWS",
+      "confidence": 0.93,
+      "evidence": "Monitoring infrastructure deployed using AWS",
+      "requirement_level": "bonus"
+    }
+  ],
+  "registered_student_ids": [
+    "S001",
+    "S002",
+    "S003"
+  ],
+  "retrieved_at": "2026-09-01T06:40:42Z",
+  "warnings": []
+}
