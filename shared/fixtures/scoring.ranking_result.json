@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "job_id": "J001",
+  "policy_version": "ranking-v1",
+  "requirement_weights": { "required": 1.0, "preferred": 0.6, "bonus": 0.3 },
+  "aggregation": "max",
+  "ranked_candidates": [
+    {
+      "rank": 1,
+      "student_id": "S001",
+      "name": "Rahul",
+      "score": 0.8702,
+      "numerator": 3.568,
+      "denominator": 4.1,
+      "skill_scores": [
+        { "skill_id": "SK01", "skill_name": "Python", "requirement_level": "required", "weight": 1.0, "strength": 0.98, "has_evidence": true, "contribution": 0.98,
+          "contributing_repos": [
+            { "repo_id": "R001", "repo_name": "ecommerce-api", "confidence": 0.98, "evidence": "Backend services implemented in Python", "selected": true },
+            { "repo_id": "R002", "repo_name": "ml-price-predictor", "confidence": 0.90, "evidence": "ML pipeline implemented in Python", "selected": false },
+            { "repo_id": "R003", "repo_name": "chatbot", "confidence": 0.75, "evidence": "Chatbot backend implemented in Python", "selected": false }
+          ] },
+        { "skill_id": "SK04", "skill_name": "REST API", "requirement_level": "required", "weight": 1.0, "strength": 0.95, "has_evidence": true, "contribution": 0.95 },
+        { "skill_id": "SK02", "skill_name": "FastAPI", "requirement_level": "preferred", "weight": 0.6, "strength": 0.96, "has_evidence": true, "contribution": 0.576 },
+        { "skill_id": "SK05", "skill_name": "PostgreSQL", "requirement_level": "preferred", "weight": 0.6, "strength": 0.92, "has_evidence": true, "contribution": 0.552 },
+        { "skill_id": "SK06", "skill_name": "Docker", "requirement_level": "preferred", "weight": 0.6, "strength": 0.85, "has_evidence": true, "contribution": 0.51 },
+        { "skill_id": "SK07", "skill_name": "AWS", "requirement_level": "bonus", "weight": 0.3, "strength": 0, "has_evidence": false, "contribution": 0, "contributing_repos": [] }
+      ]
+    }
+  ],
+  "computed_at": "2026-09-01T10:00:05Z"
+}

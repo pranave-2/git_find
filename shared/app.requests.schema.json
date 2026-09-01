@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://recruitment-genie/shared/app.requests.schema.json",
+  "title": "Module E — API Request Contracts",
+  "description": "Inbound payloads the frontend sends to the backend. These are the two entry points of the system: a student registering their GitHub account (feeds Pipeline A) and a recruiter submitting a raw JD (starts Pipeline B).",
+  "$defs": {
+    "student_registration": {
+      "$anchor": "student_registration",
+      "type": "object",
+      "description": "POST /students. Triggers ingestion for the account's public repositories.",
+      "required": ["name", "github_username"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "email": { "type": "string", "format": "email" },
+        "github_username": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$",
+          "description": "GitHub's own username rules: alphanumeric plus single internal hyphens, max 39 chars."
+        },
+        "repo_urls": {
+          "type": "array",
+          "items": { "type": "string", "format": "uri" },
+          "description": "Optional explicit repo list. When omitted, ingestion enumerates the account's public repositories."
+        },
+        "consent": {
+          "type": "boolean",
+          "const": true,
+          "description": "Student agrees to have their public repositories analysed. Required — the pipeline must not run without it."
+        }
+      }
+    },
+
+    "job_submission": {
+      "$anchor": "job_submission",
+      "type": "object",
+      "description": "POST /jobs. The raw JD text goes straight to Genie — the backend does no skill extraction of its own.",
+      "required": ["title", "jd_text", "registered_student_ids"],
+      "additionalProperties": false,
+      "properties": {
+        "job_id": { "$ref": "common.schema.json#/$defs/job_id", "description": "Omitted on create; assigned by the backend." },
+        "title": { "type": "string", "minLength": 1, "maxLength": 200, "examples": ["Backend Software Engineer"] },
+        "jd_text": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 20000,
+          "description": "Unmodified job description. Passed verbatim to the Recruitment Genie agent."
+        },
+        "registered_student_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "common.schema.json#/$defs/student_id" },
+          "description": "Candidates who applied for this job. Retrieval is restricted to this set."
+        },
+        "policy_overrides": {
+          "type": "object",
+          "description": "Optional per-job requirement weights. Absent means the default 1.0 / 0.6 / 0.3 policy.",
+          "additionalProperties": false,
+          "properties": {
+            "required":  { "type": "number", "minimum": 0 },
+            "preferred": { "type": "number", "minimum": 0 },
+            "bonus":     { "type": "number", "minimum": 0 }
+          }
+        }
+      }
+    }
+  }
+}

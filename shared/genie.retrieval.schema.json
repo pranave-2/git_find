@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://recruitment-genie/shared/genie.retrieval.schema.json",
+  "title": "Module D — Genie Retrieval Result",
+  "description": "Output of the Recruitment Genie layer for one raw JD. Contains the JD interpretation, the SQL Genie generated, and the retrieved repository-level evidence rows. Per the retrieval instructions, Genie retrieves and never scores — this schema has no candidate score or rank field, and additionalProperties:false keeps it that way.",
+  "type": "object",
+  "required": ["schema_version", "job_id", "interpreted_requirements", "mapped_skills", "evidence_rows", "retrieved_at"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/schema_version" },
+    "job_id": { "$ref": "common.schema.json#/$defs/job_id" },
+
+    "genie_space_id": { "type": "string", "description": "Databricks Genie space the query ran against." },
+    "jd_text_hash": { "type": "string", "description": "Hash of the raw JD, so a repeated submission is recognisable and cacheable." },
+
+    "interpreted_requirements": {
+      "type": "object",
+      "description": "How Genie read the JD's requirement language. The team wrote no JD parser — this is the semantic layer's work.",
+      "required": ["required", "preferred", "bonus"],
+      "additionalProperties": false,
+      "properties": {
+        "required":  { "type": "array", "items": { "$ref": "common.schema.json#/$defs/skill_name" } },
+        "preferred": { "type": "array", "items": { "$ref": "common.schema.json#/$defs/skill_name" } },
+        "bonus":     { "type": "array", "items": { "$ref": "common.schema.json#/$defs/skill_name" } }
+      }
+    },
+
+    "mapped_skills": {
+      "type": "array",
+      "description": "Audit trail from JD wording to canonical skill, e.g. 'containerized deployment' -> Docker via the synonym vocabulary.",
+      "items": {
+        "type": "object",
+        "required": ["jd_term", "skill_id", "skill_name", "requirement_level", "mapping_source"],
+        "additionalProperties": false,
+        "properties": {
+          "jd_term":    { "type": "string", "examples": ["containerized deployment"] },
+          "skill_id":   { "$ref": "common.schema.json#/$defs/skill_id" },
+          "skill_name": { "$ref": "common.schema.json#/$defs/skill_name" },
+          "requirement_level": { "$ref": "common.schema.json#/$defs/requirement_level" },
+          "mapping_source": { "type": "string", "enum": ["exact", "synonym", "semantic"] }
+        }
+      }
+    },
+
+    "generated_sql": {
+      "type": "string",
+      "description": "The query Genie actually produced. Stored verbatim so a judge can see the retrieval was dynamic, not hardcoded."
+    },
+
+    "evidence_rows": {
+      "type": "array",
+      "description": "One row per (candidate, repository, skill). Multiple repositories demonstrating the same skill are all preserved — collapsing them is Module C's job.",
+      "items": {
+        "type": "object",
+        "required": ["student_id", "name", "repo_id", "repo_name", "skill_id", "skill_name", "confidence"],
+        "additionalProperties": false,
+        "properties": {
+          "student_id": { "$ref": "common.schema.json#/$defs/student_id" },
+          "name":       { "type": "string" },
+          "repo_id":    { "$ref": "common.schema.json#/$defs/repo_id" },
+          "repo_name":  { "type": "string" },
+          "skill_id":   { "$ref": "common.schema.json#/$defs/skill_id" },
+          "skill_name": { "$ref": "common.schema.json#/$defs/skill_name" },
+          "confidence": {
+            "$ref": "common.schema.json#/$defs/unit_interval",
+            "description": "Read straight from REPOSITORY_SKILL.confidence — the deterministic Evidence Score. Genie passes it through untouched and must never treat it as a candidate score."
+          },
+          "evidence":     { "type": "string" },
+          "requirement_level": { "$ref": "common.schema.json#/$defs/requirement_level" }
+        }
+      }
+    },
+
+    "registered_student_ids": {
+      "type": "array",
+      "items": { "$ref": "common.schema.json#/$defs/student_id" },
+      "description": "Candidates in scope for this job. Lets Module C detect a candidate who was registered but returned zero evidence rows, rather than silently dropping them from the ranking."
+    },
+
+    "retrieved_at": { "$ref": "common.schema.json#/$defs/timestamp" },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "e.g. a JD term that mapped to no canonical skill — a signal to extend the synonym vocabulary."
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://recruitment-genie/shared/llm_evidence.schema.json",
+  "title": "Module B — LLM Evidence Layer",
+  "description": "Output of the Gemini evidence module. One document per repository. Produces a repo summary, candidate skill labels, natural-language evidence and embedding similarity. Deliberately has NO confidence or score field — scoring belongs to Module C. additionalProperties:false enforces that.",
+  "type": "object",
+  "required": ["schema_version", "repo_id", "model", "generated_at", "repo_summary", "skills"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "$ref": "common.schema.json#/$defs/schema_version" },
+    "repo_id": { "$ref": "common.schema.json#/$defs/repo_id" },
+
+    "model": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "examples": ["gemini-2.5-pro"] },
+        "prompt_version": { "type": "string", "description": "Bump when the prompt changes so old rows are re-generatable." },
+        "embedding_model": { "type": "string" }
+      }
+    },
+
+    "repo_summary": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000,
+      "description": "One-paragraph description of what the repository does. Written once at ingestion, reused for every JD."
+    },
+
+    "skills": {
+      "type": "array",
+      "description": "Candidate skills the model believes the repo demonstrates. A label here is a claim, not a verdict — Module C decides how much it counts.",
+      "items": { "$ref": "#/$defs/skill_claim" }
+    },
+
+    "generated_at": { "$ref": "common.schema.json#/$defs/timestamp" },
+
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  },
+
+  "$defs": {
+    "skill_claim": {
+      "type": "object",
+      "required": ["skill_name", "nl_evidence", "semantic_similarity"],
+      "additionalProperties": false,
+      "properties": {
+        "skill_name": { "$ref": "common.schema.json#/$defs/skill_name" },
+        "skill_id": {
+          "oneOf": [
+            { "$ref": "common.schema.json#/$defs/skill_id" },
+            { "type": "null" }
+          ],
+          "description": "Resolved against the SKILL vocabulary when the label matches a canonical skill; null when the model proposed a skill outside the vocabulary."
+        },
+        "nl_evidence": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500,
+          "description": "How the skill shows up in this repo, in one sentence. Goes into SKILL_EVIDENCE.evidence and later into ai_summarize.",
+          "examples": ["Backend services implemented in Python"]
+        },
+        "semantic_similarity": {
+          "$ref": "common.schema.json#/$defs/unit_interval",
+          "description": "Cosine similarity between the canonical skill description embedding and the repo content embedding. An observable measurement, not a model judgement."
+        },
+        "referenced_files": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Files the model cited when writing nl_evidence, so the claim can be checked."
+        }
+      }
+    }
+  }
+}

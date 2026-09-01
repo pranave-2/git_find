@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://recruitment-genie/shared/common.schema.json",
+  "title": "Shared Definitions",
+  "description": "Common types referenced by every module contract. Owned jointly; changes require agreement from all five module owners.",
+  "$defs": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "SemVer of the contract the producer wrote against. Consumers must reject a major version they do not know."
+    },
+    "student_id": { "type": "string", "pattern": "^S[0-9]{3,}$", "examples": ["S001"] },
+    "repo_id":    { "type": "string", "pattern": "^R[0-9]{3,}$", "examples": ["R001"] },
+    "skill_id":   { "type": "string", "pattern": "^SK[0-9]{2,}$", "examples": ["SK01"] },
+    "job_id":     { "type": "string", "pattern": "^J[0-9]{3,}$", "examples": ["J001"] },
+    "evidence_id":{ "type": "string", "pattern": "^E[0-9]{3,}$", "examples": ["E001"] },
+
+    "skill_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "description": "Canonical skill label as it appears in SKILL.skill_name. Not free text — must exist in the skill vocabulary."
+    },
+
+    "unit_interval": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "description": "Normalised signal or score in [0,1]. Never a percentage."
+    },
+
+    "requirement_level": {
+      "type": "string",
+      "enum": ["required", "preferred", "bonus"],
+      "description": "Derived from the JD's own requirement language, never from model judgement."
+    },
+
+    "timestamp": { "type": "string", "format": "date-time" },
+
+    "provenance": {
+      "type": "object",
+      "description": "Where an observed signal came from, so any Evidence Score can be decomposed back to raw facts.",
+      "properties": {
+        "file_path": { "type": "string" },
+        "line": { "type": "integer", "minimum": 1 },
+        "excerpt": { "type": "string", "maxLength": 512 }
+      },
+      "required": ["file_path"],
+      "additionalProperties": false
+    }
+  }
+}

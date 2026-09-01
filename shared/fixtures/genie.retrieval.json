@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0.0",
+  "job_id": "J001",
+  "genie_space_id": "01ef-recruitment-genie",
+  "jd_text_hash": "sha256:4b1f0c...",
+  "interpreted_requirements": {
+    "required": ["Python", "REST API"],
+    "preferred": ["FastAPI", "Flask", "PostgreSQL", "Docker"],
+    "bonus": ["AWS"]
+  },
+  "mapped_skills": [
+    { "jd_term": "backend services using Python", "skill_id": "SK01", "skill_name": "Python", "requirement_level": "required", "mapping_source": "exact" },
+    { "jd_term": "building REST APIs", "skill_id": "SK04", "skill_name": "REST API", "requirement_level": "required", "mapping_source": "synonym" },
+    { "jd_term": "Docker experience", "skill_id": "SK06", "skill_name": "Docker", "requirement_level": "preferred", "mapping_source": "exact" },
+    { "jd_term": "AWS experience is a plus", "skill_id": "SK07", "skill_name": "AWS", "requirement_level": "bonus", "mapping_source": "exact" }
+  ],
+  "generated_sql": "SELECT jr.job_id, s.student_id, s.name, r.repo_id, r.repo_name, sk.skill_name, rs.confidence, se.evidence FROM job_registration jr JOIN student s ON jr.student_id = s.student_id JOIN repository r ON s.student_id = r.student_id JOIN repository_skill rs ON r.repo_id = rs.repo_id JOIN skill sk ON rs.skill_id = sk.skill_id JOIN skill_evidence se ON rs.repo_id = se.repo_id AND rs.skill_id = se.skill_id WHERE jr.job_id = 'J001' AND sk.skill_name IN ('Python','REST API','FastAPI','Flask','PostgreSQL','Docker','AWS')",
+  "evidence_rows": [
+    { "student_id": "S001", "name": "Rahul", "repo_id": "R001", "repo_name": "ecommerce-api", "skill_id": "SK01", "skill_name": "Python", "confidence": 0.98, "evidence": "Backend services implemented in Python", "requirement_level": "required" },
+    { "student_id": "S001", "name": "Rahul", "repo_id": "R002", "repo_name": "ml-price-predictor", "skill_id": "SK01", "skill_name": "Python", "confidence": 0.90, "evidence": "ML pipeline implemented in Python", "requirement_level": "required" },
+    { "student_id": "S001", "name": "Rahul", "repo_id": "R003", "repo_name": "chatbot", "skill_id": "SK01", "skill_name": "Python", "confidence": 0.75, "evidence": "Chatbot backend implemented in Python", "requirement_level": "required" },
+    { "student_id": "S001", "name": "Rahul", "repo_id": "R003", "repo_name": "chatbot", "skill_id": "SK06", "skill_name": "Docker", "confidence": 0.85, "evidence": "Application containerized using Docker", "requirement_level": "preferred" }
+  ],
+  "registered_student_ids": ["S001", "S002", "S003"],
+  "retrieved_at": "2026-09-01T10:00:00Z",
+  "warnings": []
+}
