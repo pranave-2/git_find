@@ -1,0 +1,52 @@
+# Layer 3 — Skill synonym / semantic vocabulary.
+#
+# Maps JD terminology to canonical skill_id rows (see /shared skill table via
+# genie-agent/ddl/schema.sql). Extend this list whenever the real Genie space
+# fails to map a JD term to a skill, or maps it to the wrong one.
+#
+# match: substrings looked for in the JD text (case-insensitive).
+# skill_id / skill_name: the canonical row this term resolves to.
+
+synonyms:
+  - match: ["python"]
+    skill_id: SK01
+    skill_name: Python
+
+  - match: ["fastapi"]
+    skill_id: SK02
+    skill_name: FastAPI
+
+  - match: ["flask"]
+    skill_id: SK03
+    skill_name: Flask
+
+  - match: ["rest api", "rest apis", "http services", "web services", "restful"]
+    skill_id: SK04
+    skill_name: REST API
+
+  - match: ["postgresql", "postgres", "relational database"]
+    skill_id: SK05
+    skill_name: PostgreSQL
+
+  - match: ["docker", "containerized deployment", "containerization", "containerize"]
+    skill_id: SK06
+    skill_name: Docker
+
+  - match: ["aws", "amazon web services", "cloud deployment"]
+    skill_id: SK07
+    skill_name: AWS
+
+  - match: ["java"]
+    skill_id: SK08
+    skill_name: Java
+
+  - match: ["spring boot", "spring framework"]
+    skill_id: SK09
+    skill_name: Spring Boot
+
+# Phrases that mark a requirement level in JD text. Checked per sentence,
+# nearest-match wins; a skill mentioned with no marker defaults to "preferred".
+requirement_markers:
+  required: ["required", "must have", "strong experience", "is a must"]
+  preferred: ["preferred", "nice to have", "good to have"]
+  bonus: ["a plus", "bonus", "advantageous"]
