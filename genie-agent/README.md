@@ -94,17 +94,39 @@ Every evidence row across every round was checked field-by-field against
 averaged. This confirms Layers 1–5 all functioning correctly on a real
 Genie Agent, across multiple question phrasings, not just one lucky path.
 
-**Still open**: this was verified through the chat UI, which returns
-prose/CSV, not the structured JSON `/shared/genie.retrieval.schema.json`
-needs. The Conversation API script (`start-conversation` → poll
-`get_message` → `statement_id` → literal rows) that turns this into
-something Module C can call programmatically isn't written yet.
+All of the above was through the chat UI, which returns prose/CSV, not the
+structured JSON `/shared/genie.retrieval.schema.json` needs. That gap is
+now closed by `scripts/run_genie_query.py`.
+
+## Calling it programmatically
+
+`scripts/run_genie_query.py` calls the real Conversation API
+(`start-conversation` → poll `get_message` → `statement_id` → literal SQL
+result rows), and produces a `genie.retrieval.schema.json`-shaped document.
+Two things it does that the chat UI doesn't give you for free:
+
+- **ID resolution**: Genie's table columns are names (`name`, `repo_name`,
+  `skill_name`), not surrogate keys — the schema wants
+  `student_id`/`repo_id`/`skill_id` too. The script runs a second, real
+  query against `student`/`repository`/`skill` in the same warehouse and
+  joins the IDs on in Python.
+- **`interpreted_requirements` / `mapped_skills`**: the round-4 "table
+  only" instruction fix means Genie's response no longer narrates its own
+  required/preferred/bonus classification anywhere. The script derives it
+  from the JD text using `config/synonyms.yaml` — the same vocabulary
+  already loaded into Genie's Instructions, just applied outside the
+  agent instead of asking it to narrate what it already knows internally.
+
+```bash
+pip install -r requirements.txt
+export DATABRICKS_HOST=https://<your-workspace>.cloud.databricks.com
+export DATABRICKS_TOKEN=<personal access token>   # never commit this, never pass on argv
+
+python3 scripts/run_genie_query.py --job-id J001 --out out.json
+python3 scripts/validate_retrieval.py out.json
+```
 
 ## Verifying it
-
-Submit the seeded JD (`seed/seed_data.sql`, job J001) to the real Genie
-Agent — through the UI or the Conversation API — and export the response as
-JSON. Then:
 
 ```bash
 pip install jsonschema referencing
